@@ -1,4 +1,4 @@
-#ifdef _XWND_H
+#ifndef _XWND_H
 #define _XWND_H
 
 class XWnd {
