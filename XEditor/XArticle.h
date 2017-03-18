@@ -31,12 +31,16 @@ public:
 
 	void InsertRow(int line, TCHAR *content);
 	void InsertRowBegin(TCHAR *content);
-	void DeletRow(int line);
+	void InsertRowEnd(TCHAR *content);
+	void DeleteRow(int line);
 	void DeleteRowBegin();
 	void DeleteRowEnd();
 	void InsertChar(int line, int col, TCHAR ch);
 	void InsertCharBegin(int line, TCHAR ch);
 	void InsertCharEnd(int line, TCHAR ch);
+	void DeleteChar(int line, int col);
+	void DeleteCharBegin(int line);
+	void DeleteCharEnd(int line);
 	void InsertString(int line, int col, TCHAR *str, int len);
 	void InsertStringBegin(int line, TCHAR *str, int len);
 	void InsertStringEnd(int line, TCHAR *str, int len);
@@ -50,7 +54,7 @@ public:
 
 	int GetSize();
 	int GetRows();
-	int Getcount();
+	int GetCount(int line);
 	TCHAR *GetContent(int line);
 	int GetRealLength(int x0, int y0, int x1, int y1);
 	void CopyString(TCHAR *dest, int line, int x0, int x1);
@@ -58,7 +62,7 @@ public:
 	void CombineRow(int line);
 	void SeparateRow(int line, int col);
 
-	int GetColMax(int line);
+	int GetColMax();
 	int GetCol(int line);
 	int GetCol(int line, int index);
 	int GetDataIndex(int line, int col);
