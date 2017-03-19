@@ -75,18 +75,11 @@ public:
 	BOOL SearchTextRev(int line, int startPos, TCHAR *text, int *index,
 		BOOL CaseSensitive, BOOL WholeWord);
 
-	TCHAR *Formet();
+	TCHAR *Format();
 
 	void Initialize(TCHAR *Src);
 	void Destory();
 	void Print();
-
-
-
-
-
-
-
 };
 
 #endif

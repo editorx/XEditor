@@ -479,6 +479,14 @@ void XArticle::DeleteString(int line, int col, int len)
 	}
 }
 
+void XArticle::DeleteStringBegin(int line, int len)
+{
+	for (int i = 0; i < len; i++)
+	{
+		DeleteCharBegin(line);
+	}
+}
+
 void XArticle::DeleteStringEnd(int line, int len)
 {
 	for (int i = 0; i < len; i++)
@@ -628,4 +636,413 @@ int XArticle::GetDataIndex(int line, int col)
 		length++;
 	}
 	return index;
+}
+
+TCHAR XArticle::GetData(int line, int col)
+{
+	SENTENCE *pNode = pHead;
+	int length = 0;
+	TCHAR dat = TEXT('\0');
+	for (int i = 0; i < line; i++)
+	{
+		pNode = pNode->Next;
+	}
+	for (int j = 0; j < pNode->count; j++)
+	{
+		if (col <= length)
+		{
+			dat = *(pNode->content + j);
+			break;
+		}
+		if (*(pNode->content + j) > 0x00FF)
+		{
+			length++;
+		}
+		length++;
+	}
+	return dat;
+}
+
+TCHAR XArticle::GetDataByIndex(int line, int index)
+{
+	SENTENCE *pNode = pHead;
+	int length = 0;
+	TCHAR dat = TEXT('\0');
+	for (int i = 0; i < line; i++)
+	{
+		pNode = pNode->Next;
+	}
+	if (index < 0)
+	{
+		index = 0;
+	}
+	if (index >= pNode->count)
+	{
+		index = pNode->count;
+	}
+
+	dat = *(pNode->content + index);
+	return dat;
+}
+
+BOOL XArticle::GetDataType(TCHAR ch)
+{
+	if (ch > 0x00FF)
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+
+TCHAR *XArticle::Format()
+{
+	int wholeSize = 0;
+	wholeSize = this->size + 2 * rows + 1;
+	if (pBufSave != NULL)
+		free(pBufSave);
+	pBufSave = (TCHAR *)malloc(wholeSize * sizeof(wholeSize));
+	TCHAR *pBufTemp = pBufSave;
+	SENTENCE *pNode = pHead;
+	for (int i = 0; i < rows - 1; i++)
+	{
+		lstrcpy(pBufSave, pNode->content);
+		pBufSave += pNode->count;
+		lstrcpy(pBufSave, TEXT("\r\n"));
+		pBufSave += 2;
+		pNode = pNode->Next;
+	}
+	lstrcpy(pBufSave, pNode->content);
+	pBufSave = pBufTemp;
+	pBufSave[wholeSize - 1] = TEXT('\0');
+	return pBufSave;
+}
+
+void XArticle::InsertChar(int line, int col, TCHAR ch)
+{
+	if (line < 0 || line > rows)
+		return;
+
+	SENTENCE *pNode = pHead;
+	for (int i = 0; i < line; i++)
+	{
+		pNode = pNode->Next;
+	}
+	TCHAR *pText = pNode->content;
+	int sLen = (pNode->count + 1) + 1;
+	if (col > sLen - 2)
+		return;
+	TCHAR *pTemp = (TCHAR *)malloc(sLen * sizeof(TCHAR));
+	int index = 1;
+	for (index = 0; index < col; index++)
+	{
+		pTemp[index] = pText[index];
+	}
+	pTemp[index] = ch;
+	index++;
+	for (; index < sLen; index++)
+	{
+		pTemp[index] = pText[index - 1];
+	}
+	pNode->content = pTemp;
+	pNode->count++;
+	size++;
+	free(pText);
+}
+
+void XArticle::InsertCharBegin(int line, TCHAR ch)
+{
+	InsertChar(line, 0, ch);
+}
+
+void XArticle::InsertCharEnd(int line, TCHAR ch)
+{
+	SENTENCE *pNode = pHead;
+	for (int i = 0; i < line; i++)
+	{
+		pNode = pNode->Next;
+	}
+	TCHAR *pText = pNode->content;
+	int sLen = (pNode->count + 1) + 1;
+	InsertChar(line, sLen - 2, ch);
+}
+
+void XArticle::DeleteChar(int line, int col)
+{
+	if (line < 0 || line >= rows)
+		return;
+
+	SENTENCE *pNode = pHead;
+	for (int i = 0; i < line; i++)
+	{
+		pNode = pNode->Next;
+	}
+	TCHAR *pText = pNode->content;
+	int sLen = (pNode->count + 1) - 1;
+	if (col > sLen - 1)
+		return;
+	TCHAR *pTemp = (TCHAR *)malloc(sLen * sizeof(TCHAR));
+	int index = 0;
+	for (index = 0; index < col; index++)
+	{
+		pTemp[index] = pText[index];
+	}
+	for ( ; index < sLen; index++)
+	{
+		pTemp[index] = pTemp[index + 1];
+	}
+	pNode->content = pTemp;
+	pNode->count--;
+	size--;
+	free(pText);
+}
+
+void XArticle::DeleteCharBegin(int line)
+{
+	DeleteChar(line, 0);
+}
+
+void XArticle::DeleteCharEnd(int line)
+{
+	SENTENCE *pNode = pHead;
+	for (int i = 0; i < line; i++)
+	{
+		pNode = pNode->Next;
+	}
+	TCHAR *pText = pNode->content;
+	int sLen = (pNode->count + 1) - 1;
+	DeleteChar(line, sLen - 1);
+}
+
+void XArticle::Print()
+{
+	SENTENCE *pNode = pHead;
+	while (pNode->Next != NULL)
+	{
+		wprintf(pNode->content);
+		wprintf(TEXT("\t\tLength = %d"), pNode->count);
+		wprintf(TEXT("\n"));
+		pNode = pNode->Next;
+	}
+}
+
+void XArticle::InsertRow(int line, TCHAR *content)
+{
+	if (line < 0 || line > rows)
+		return;
+	SENTENCE *pNode = (SENTENCE *)malloc(sizeof(SENTENCE));
+	int length = lstrlen(content);
+	size += length;
+	pNode->content = (TCHAR *)malloc((length + 1) * sizeof(TCHAR));
+	pNode->count = length;
+	if (length != 0)
+	{
+		lstrcpy(pNode->content, content);
+	}
+	pNode->content[length] = TEXT('\0');
+	if (line == 0)
+	{
+		pNode->Prev = NULL;
+		pNode->Next = pHead;
+		pHead->Prev = pNode;
+		pHead = pNode;
+	}
+	else if (line == rows)
+	{
+		pNode->Prev = pTail->Prev;
+		pTail->Prev->Next = pNode;
+		pNode->Next = pTail;
+		pTail->Prev = pNode;
+	}
+	else
+	{
+		SENTENCE *pTime = pHead;
+		for (int i = 0; i < line; i++)
+		{
+			pTime = pTime->Next;
+		}
+		pNode->Next = pTime;
+		pNode->Prev = pTime->Prev;
+		pTime->Prev->Next = pNode;
+		pTime->Prev = pNode;
+	}
+	rows++;
+}
+
+void XArticle::InsertRowBegin(TCHAR *content)
+{
+	InsertRow(0, content);
+}
+
+void XArticle::InsertRowEnd(TCHAR *content)
+{
+	InsertRow(rows, content);
+}
+
+void XArticle::DeleteRow(int line)
+{
+	if (line < 0 || line > rows - 1)
+		return;
+	SENTENCE *pNode;
+	int length;
+	if (line == 0)
+	{
+		pNode = pHead;
+		pHead = pHead->Next;
+		pHead->Prev = NULL;
+		length = pNode->count;
+		free(pNode->content);
+		free(pNode);
+	}
+	else if (line == rows - 1)
+	{
+		pNode = pTail->Prev;
+		length = pNode->count;
+		pNode->Prev->Next = pTail;
+		pTail->Prev = pNode->Prev;
+		free(pNode->content);
+		free(pNode);
+	}
+	else
+	{
+		pNode = pHead;
+		for (int i = 0; i < line; i++)
+		{
+			pNode = pNode->Next;
+		}
+		pNode->Prev->Next = pNode->Next;
+		pNode->Next->Prev = pNode->Prev;
+		length = pNode->count;
+		free(pNode->content);
+		free(pNode);
+	}
+	rows--;
+	size -= length;
+}
+
+void XArticle::DeleteRowBegin()
+{
+	DeleteRow(0);
+}
+
+void XArticle::DeleteRowEnd()
+{
+	DeleteRow(rows - 1);
+}
+
+XArticle::XArticle() : rows(0), size(0)
+{
+	pBuf = NULL;
+	pBufSave = NULL;
+	pHead = NULL;
+	pTail = NULL;
+	rows = 0;
+}
+
+XArticle::XArticle(TCHAR *SrcData) : rows(0), size(0)
+{
+	pBuf = NULL;
+	pBufSave = NULL;
+	pHead = NULL;
+	pTail = NULL;
+	rows = 0;
+	Initialize(SrcData);
+}
+
+XArticle::~XArticle()
+{
+	Destory();
+}
+
+void XArticle::Initialize(TCHAR *Src)
+{
+	int length = lstrlen(Src) + 1;
+	pBuf = (TCHAR *)malloc(length * sizeof(TCHAR));
+	lstrcpy(pBuf, Src);
+
+	pTail = pHead = NULL;
+	int sLen = lstrlen(pBuf);
+	TCHAR *pBegin = pBuf;
+	TCHAR *pEnd = pBuf;
+	size = 0;
+	rows = 0;
+	for (int i = 0; i < sLen + 1; i++)\
+	{
+		if (*pEnd == TEXT('\r') || *pEnd == TEXT('\0'))
+		{
+			int lenTemp = pEnd - pBegin;
+			size += lenTemp;
+			TCHAR *strTemp = (TCHAR *)malloc((lenTemp + 1) * sizeof(TCHAR));
+			for (int j = 0; j < lenTemp; j++)
+			{
+				strTemp[j] = *pBegin++;
+			}
+			strTemp[lenTemp] = TEXT('\0');
+			if (pHead == NULL)
+			{
+				pHead = (SENTENCE *)malloc(sizeof(SENTENCE));
+				pTail = (SENTENCE *)malloc(sizeof(SENTENCE));
+				pHead->Prev = NULL;
+				pHead->Next = pTail;
+				pHead->content = strTemp;
+				pHead->count = lenTemp;
+				pTail->Prev = pHead;
+				pTail->Next = NULL;
+				pTail->content = (TCHAR *)malloc(sizeof(TCHAR));
+				pTail->content[0] = TEXT('\0');
+			}
+			else
+			{
+				SENTENCE *pNode = (SENTENCE *)malloc(sizeof(TCHAR));
+				pNode->Prev = pTail->Prev;
+				pTail->Prev->Next = pNode;
+				pNode->Next = pTail;
+				pTail->Prev = pNode;
+				pNode->content = strTemp;
+				pNode->count = lenTemp;
+			}
+			pEnd++;
+			rows++;
+			continue;
+		}
+		if (*pEnd == TEXT('\n'))
+		{
+			pEnd++;
+			pBegin = pEnd;
+			continue;
+		}
+		pEnd++;
+	}
+}
+
+void XArticle::Destory()
+{
+	if (pHead != NULL)
+	{
+		while (pHead->Next != NULL)
+		{
+			SENTENCE *pNode = pHead;
+			pHead = pHead->Next;
+			free(pNode->content);
+			free(pNode);
+		}
+		free(pHead->content);
+		free(pHead);
+	}
+	if (pBuf != NULL)
+	{
+		free(pBuf);
+		pBuf = NULL;
+	}
+	if (pBufSave != NULL)
+	{
+		free(pBufSave);
+		pBufSave = NULL;
+	}
+	pHead = NULL;
+	pTail = NULL;
+	rows = 0;
+	size = 0;
 }
