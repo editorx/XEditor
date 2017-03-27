@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "XWnd.h"
 #include "XArticle.h"
-//#include "CArticleTag.h"
+#include "XArticleTag.h"
 //#include "Debug.h"
 //#include "resource.h"
 //#include "CDialog.h"

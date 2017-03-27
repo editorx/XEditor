@@ -153,6 +153,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="XArticle.h" />
     <ClInclude Include="XArticleTag.h" />
+    <ClInclude Include="XDialog.h" />
     <ClInclude Include="XEdit.h" />
     <ClInclude Include="XEditor.h" />
     <ClInclude Include="XWnd.h" />
@@ -168,6 +169,7 @@
     </ClCompile>
     <ClCompile Include="XArticle.cpp" />
     <ClCompile Include="XArticleTag.cpp" />
+    <ClCompile Include="XDialog.cpp" />
     <ClCompile Include="XEdit.cpp" />
     <ClCompile Include="XEditor.cpp" />
     <ClCompile Include="XEitorApp.cpp" />
