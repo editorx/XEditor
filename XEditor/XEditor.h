@@ -9,6 +9,7 @@ private:
 	
 	TCHAR InitFilePath[MAX_PATH];
 
+	
 	virtual void GetWndClassEx(WNDCLASSEX &wc);
 
 public:
