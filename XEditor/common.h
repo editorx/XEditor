@@ -5,16 +5,16 @@
 #include <windows.h>
 #include "XWnd.h"
 #include "XEditor.h"
-//#include "CFile.h"
+#include "XFile.h"
 #include "XArticle.h"
-//#include "CArticleTag.h"
+#include "XArticleTag.h"
 #include "SeqStack.h"
 #include "RedoUndo.h"
-//#include "CEdit.h"
-//#include "CDialog.h"
+#include "XEdit.h"
+#include "XDialog.h"
 //#include "CAboutDlg.h"
-//#include "CFindDlg.h"
-//#include "resource.h"
+#include "XFindDlg.h"
+#include "Resource.h"
 
 //#include "Debug.h"
 

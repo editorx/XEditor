@@ -157,6 +157,7 @@
     <ClInclude Include="XEdit.h" />
     <ClInclude Include="XEditor.h" />
     <ClInclude Include="XFile.h" />
+    <ClInclude Include="XFindDlg.h" />
     <ClInclude Include="XWnd.h" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +176,7 @@
     <ClCompile Include="XEditor.cpp" />
     <ClCompile Include="XEitorApp.cpp" />
     <ClCompile Include="XFile.cpp" />
+    <ClCompile Include="XFindDlg.cpp" />
     <ClCompile Include="XWnd.cpp" />
   </ItemGroup>
   <ItemGroup>
