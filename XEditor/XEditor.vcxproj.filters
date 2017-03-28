@@ -60,6 +60,9 @@
     <ClInclude Include="XFindDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -96,6 +99,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="XFindDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
