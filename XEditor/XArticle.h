@@ -1,5 +1,5 @@
-#ifndef _ARTICLE_H_
-#define _ARTICLE_H_
+#ifndef _X_ARTICLE_H_
+#define _X_ARTICLE_H_
 
 class XArticle
 {

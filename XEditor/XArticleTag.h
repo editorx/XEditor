@@ -1,5 +1,5 @@
-#ifndef _XARTICLETAG_H 
-#define _XARTICLETAG_H
+#ifndef _X_ARTICLETAG_H 
+#define _X_ARTICLETAG_H
 
 class XArticleTag : public XArticle
 {

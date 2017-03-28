@@ -1,5 +1,5 @@
-#ifndef _XWND_H
-#define _XWND_H
+#ifndef _X_WND_H
+#define _X_WND_H
 
 class XWnd {
 protected:

@@ -1,5 +1,5 @@
-#ifndef _XDIALOG_H 
-#define _XDIALOG_H
+#ifndef _X_DIALOG_H 
+#define _X_DIALOG_H
 
 class XDialog
 {
