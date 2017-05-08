@@ -76,7 +76,7 @@ public:
 	{}
 	~XEdit() {}
 
-	LRESULT OnCreat();
+	LRESULT OnCreate();
 	void OnSettingChange();
 	void OnSize(int width, int height);
 	void OnKeyDown(WPARAM wParam, LPARAM lParam);

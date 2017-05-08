@@ -1,5 +1,5 @@
-#ifndef __COMMON_H_
-#define __COMMON_H_
+#ifndef _COMMON_H_
+#define _COMMON_H_
 
 
 #include <windows.h>
@@ -12,11 +12,11 @@
 #include "RedoUndo.h"
 #include "XEdit.h"
 #include "XDialog.h"
-//#include "CAboutDlg.h"
+#include "XAboutDlg.h"
 #include "XFindDlg.h"
 #include "Resource.h"
 
-//#include "Debug.h"
+#include "Debug.h"
 
 #endif
 #pragma once
